@@ -48,9 +48,14 @@ __all__ = [
 import logging
 from collections import defaultdict, Mapping
 from contextlib import contextmanager
-from inspect import currentframe, getargspec
+from inspect import currentframe
 from pprint import pformat
 from weakref import WeakSet
+
+try:
+    from inspect import getfullargspec as getargspec
+except ImportError:
+    from inspect import getargspec
 
 from decorator import decorator
 from werkzeug.local import Local, release_local
@@ -630,7 +635,7 @@ def guess(method):
         return method
 
     # introspection on argument names to determine api style
-    args, vname, kwname, defaults = getargspec(method)
+    args, vname, kwname, *extra_args = getargspec(method)
     names = tuple(args) + (None,) * 4
 
     if names[0] == 'self':

@@ -5,8 +5,13 @@
 # this is important for the odoo.api.guess() that relies on signatures
 from collections import defaultdict
 from decorator import decorator
-from inspect import formatargspec, getargspec
+from inspect import formatargspec
 import logging
+
+try:
+    from inspect import getfullargspec as getargspec
+except ImportError:
+    from inspect import getargspec
 
 from . import pycompat
 
